@@ -57,7 +57,7 @@ class MetasploitModule < Msf::Auxiliary
     credential_data = {
       origin_type: :service,
       module_fullname: fullname,
-      username: opts[:user],
+      username: opts[:username],
       private_data: opts[:password],
       private_type: :password
     }.merge(service_data)
@@ -82,7 +82,7 @@ class MetasploitModule < Msf::Auxiliary
       ip: c.peerhost,
       port: 0,
       service_name: 'ssh',
-      user: credential["username"],
+      username: credential["username"],
       password: credential["password"],
       proof: data
     )
